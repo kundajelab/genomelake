@@ -8,7 +8,7 @@ from Cython.Build import cythonize
 setup(
     name='genomelake',
 
-    version='0.1.1',
+    version='0.1.2',
 
     description='Simple and efficient random access to genomic data for deep learning models.',
     long_description='',
