@@ -21,7 +21,7 @@ The installer will check (and install) dependencies except cython and pyBigWig.
 ## Installation
 1. Install cython with Anaconda by running:
 
-`conda install cython==0.22.1`
+`conda install cython`
 
 2. Install pyBigWig with pip by running:
 

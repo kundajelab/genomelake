@@ -1,7 +1,8 @@
+from __future__ import absolute_import, division, print_function
 import json
-import os
-
 import numpy as np
+import os
+import six
 
 import bcolz
 from pybedtools import BedTool
@@ -50,7 +51,7 @@ def extract_bigwig_to_file(bigwig, output_dir, mode='bcolz', dtype=np.float32,
     bw = pyBigWig.open(bigwig)
     chrom_sizes = bw.chroms()
     file_shapes = {}
-    for chrom, size in chrom_sizes.iteritems():
+    for chrom, size in six.iteritems(chrom_sizes):
         data = np.empty(size)
         data = bw.values(chrom, 0, size, numpy=True)
         if nan_as_zero:
@@ -85,7 +86,7 @@ def load_directory(base_dir, in_memory=False):
                                 mmap_mode=mmap_mode)
                 for chrom in metadata['file_shapes']}
 
-        for chrom, shape in metadata['file_shapes'].iteritems():
+        for chrom, shape in six.iteritems(metadata['file_shapes']):
             if data[chrom].shape != tuple(shape):
                 raise ValueError('Inconsistent shape found in metadata file: '
                                  '{} - {} vs {}'.format(chrom, shape,
@@ -96,7 +97,7 @@ def load_directory(base_dir, in_memory=False):
         if in_memory:
             data = {k: data[k].copy() for k in data.keys()}
 
-        for chrom, shape in metadata['file_shapes'].iteritems():
+        for chrom, shape in six.iteritems(metadata['file_shapes']):
             if data[chrom].shape != tuple(shape):
                 raise ValueError('Inconsistent shape found in metadata file: '
                                  '{} - {} vs {}'.format(chrom, shape,
