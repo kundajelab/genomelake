@@ -56,7 +56,6 @@ class ArrayExtractor(BaseExtractor):
         self._data = backend.load_directory(datafile, in_memory=in_memory)
         self.multiprocessing_safe = in_memory
 
-        #arr = self._data.values()[0]
         arr = next(iter(self._data.values()))
         # The reason why we do this is because bcolz doesn't support ellipsis
         # in indexing, unlike numpy.
