@@ -1,9 +1,9 @@
+import os
 from setuptools.extension import Extension
 from setuptools import setup, find_packages
-from codecs import open
-from os import path
 
-from Cython.Build import cythonize
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name='genomelake',
@@ -11,7 +11,7 @@ setup(
     version='0.1.3',
 
     description='Simple and efficient random access to genomic data for deep learning models.',
-    long_description='',
+    long_description=read('README.md'),
 
     url='https://github.com/kundajelab/genomelake',
 
@@ -36,8 +36,9 @@ setup(
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    ext_modules=cythonize([Extension('genomelake.util',
-                                     ['genomelake/util.pyx'])]),
+    setup_requires=['cython'],
+
+    ext_modules=[Extension('genomelake.util', ['genomelake/util.pyx'])],
 
     install_requires=['bcolz>=1.1', 'numpy', 'pybedtools',
                       'pyBigWig>=0.3.2', 'pysam', 'six>=1.9.0'],
