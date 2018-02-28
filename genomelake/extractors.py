@@ -88,6 +88,10 @@ class ArrayExtractor(BaseExtractor):
 
 class FastaExtractor(BaseExtractor):
 
+    def __init__(self, datafile, use_strand=False, **kwargs):
+        super(FastaExtractor, self).__init__(datafile, **kwargs)
+        self.use_strand = use_strand
+
     def _extract(self, intervals, out, **kwargs):
         fasta = FastaFile(self._datafile)
 
@@ -95,6 +99,10 @@ class FastaExtractor(BaseExtractor):
             seq = fasta.fetch(str(interval.chrom), interval.start,
                               interval.stop)
             one_hot_encode_sequence(seq, out[index, :, :])
+
+            # reverse-complement seq the negative strand
+            if self.use_strand and interval.strand == "-":
+                out[index, :, :] = out[index, ::-1, ::-1]
 
         return out
 
