@@ -40,5 +40,5 @@ setup(
                                      ['genomelake/util.pyx'])]),
 
     install_requires=['bcolz>=1.1', 'numpy', 'pybedtools',
-                      'pyBigWig>=0.3.2', 'pysam'],
+                      'pyBigWig>=0.3.2', 'pysam', 'six>=1.9.0'],
 )

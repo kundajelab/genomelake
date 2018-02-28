@@ -1,11 +1,13 @@
+from __future__ import absolute_import, division, print_function
 import numpy as np
+import six
 
 import bcolz
 from pybedtools import BedTool
 from pybedtools import Interval
 from pysam import FastaFile
 
-import backend
+from . import backend
 from .util import one_hot_encode_sequence
 
 NUM_SEQ_CHARS = 4
@@ -54,7 +56,8 @@ class ArrayExtractor(BaseExtractor):
         self._data = backend.load_directory(datafile, in_memory=in_memory)
         self.multiprocessing_safe = in_memory
 
-        arr = self._data.values()[0]
+        #arr = self._data.values()[0]
+        arr = next(iter(self._data.values()))
         # The reason why we do this is because bcolz doesn't support ellipsis
         # in indexing, unlike numpy.
         if isinstance(arr, bcolz.carray):
