@@ -8,7 +8,7 @@ def read(fname):
 setup(
     name='genomelake',
 
-    version='0.1.3',
+    version='0.1.4',
 
     description='Simple and efficient random access to genomic data for deep learning models.',
     long_description=read('README.md'),
