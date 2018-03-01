@@ -33,7 +33,7 @@ The installer will check (and install) dependencies except cython and pyBigWig.
 
 ## Getting started: training a protein-DNA binding model
 Extract genome-wide sequence data into a genomelake data source:
-```
+```python
 from genomelake.backend import extract_fasta_to_file
 
 genome_fasta = "/mnt/data/annotations/by_release/hg19.GRCh37/hg19.genome.fa"
@@ -42,7 +42,7 @@ extract_fasta_to_file(genome_fasta, genome_data_directory)
 ```
 
 Using a BED intervals file with labels, a genome data source, and genomelake's `ArrayExtractor`, generate input DNA sequences and labels:
-```
+```python
 import pybedtools
 from genomelake.extractors import ArrayExtractor
 import numpy as np
@@ -72,7 +72,7 @@ def generate_inputs_and_labels(intervals_file, data_source, batch_size=128):
 ```
 
 Train a keras model of JUND binding to DNA using 101 base pair intervals and labels in `./examples/JUND.HepG2.chr22.101bp_intervals.tsv.gz`:
-```
+```python
 from keras.models import Sequential
 from keras.layers import Conv1D, Flatten, Dense
 
