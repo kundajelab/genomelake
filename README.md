@@ -16,18 +16,8 @@ genomelake extracts signal from genomic inputs in provided BED intervals.
 - pybedtools
 - pysam
 
-The installer will check (and install) dependencies except cython and pyBigWig.
-
 ## Installation
-1. Install cython with Anaconda by running:
-
-`conda install cython`
-
-2. Install pyBigWig with pip by running:
-
-`pip install pyBigWig`
-
-3. Clone the repository and then do:
+Clone the repository and run:
 
 `python setup.py install`
 
