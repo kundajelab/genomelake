@@ -6,6 +6,7 @@ import bcolz
 from pybedtools import BedTool
 from pybedtools import Interval
 from pysam import FastaFile
+import pyBigWig
 
 from . import backend
 from .util import one_hot_encode_sequence
