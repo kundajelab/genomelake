@@ -18,7 +18,7 @@ jobs:
 
       - run:
           name: run coveralls
-	  command: coveralls || true
+          command: coveralls || true
 
       - store_artifacts:
           path: test-reports
@@ -45,7 +45,7 @@ jobs:
 
       - run:
           name: run coveralls
-	  command: coveralls || true
+          command: coveralls || true
 
       - store_artifacts:
           path: test-reports
