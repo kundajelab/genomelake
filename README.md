@@ -1,4 +1,6 @@
 # genomelake
+[![CircleCI](https://circleci.com/gh/kundajelab/genomelake.svg?style=svg)](https://circleci.com/gh/kundajelab/genomelake) [![Coverage Status](https://coveralls.io/repos/github/kundajelab/genomelake/badge.svg?branch=master)](https://coveralls.io/github/kundajelab/genomelake?branch=master)
+
 Efficient random access to genomic data for deep learning models.
 
 Supports the following types of input data:
