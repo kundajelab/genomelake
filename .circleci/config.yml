@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: run tests
-          command: py.test --cov==genomelake
+          command: py.test --cov==genomelake tests/
 
       - run:
           name: run coveralls
