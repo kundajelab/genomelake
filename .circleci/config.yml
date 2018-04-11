@@ -1,0 +1,54 @@
+version: 2
+jobs:
+  test-py27:
+    docker:
+      - image: circleci/python:2.7.14
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: sudo pip install -e '.[develop]'
+
+      - run:
+          name: run tests
+          command: py.test
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+  test-py35:
+    docker:
+        # TODO check
+      - image: circleci/python:3.5
+
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: sudo pip install -e '.[develop]'
+
+      - run:
+          name: run tests
+          command: py.test
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+workflows:
+  version: 2
+
+  # TODO - consider running the deploy only on
+  # tag commits: https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+  test-n-deploy:
+    jobs:
+      - test-py35
+      - test-py27
