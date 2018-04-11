@@ -42,4 +42,5 @@ setup(
 
     install_requires=['bcolz>=1.1', 'numpy', 'pybedtools',
                       'pyBigWig>=0.3.2', 'pysam', 'six>=1.9.0'],
+    extras_require={"develop": ['pytest>=3.3.1']}
 )
