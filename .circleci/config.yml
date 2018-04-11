@@ -41,4 +41,14 @@ jobs:
 
       - store_artifacts:
           path: test-reports
-          destination: test-reports			            
+          destination: test-reports
+
+workflows:
+  version: 2
+
+  # TODO - consider running the deploy only on
+  # tag commits: https://circleci.com/docs/2.0/workflows/#git-tag-job-execution
+  test-n-deploy:
+    jobs:
+      - test-py35
+      - test-py27
