@@ -58,18 +58,10 @@ class ArrayExtractor(BaseExtractor):
         self.multiprocessing_safe = in_memory
 
         arr = next(iter(self._data.values()))
-        # The reason why we do this is because bcolz doesn't support ellipsis
-        # in indexing, unlike numpy.
-        if isinstance(arr, bcolz.carray):
-            def _mm_extract(self, intervals, out, **kwargs):
-                mm_data = self._data
-                for index, interval in enumerate(intervals):
-                    out[index] = mm_data[interval.chrom][interval.start:interval.stop]
-        else:
-            def _mm_extract(self, intervals, out, **kwargs):
-                mm_data = self._data
-                for index, interval in enumerate(intervals):
-                    out[index] = mm_data[interval.chrom][..., interval.start:interval.stop]
+        def _mm_extract(self, intervals, out, **kwargs):
+            mm_data = self._data
+            for index, interval in enumerate(intervals):
+                out[index] = mm_data[interval.chrom][interval.start:interval.stop]
 
         # output shape method
         shape = arr.shape
