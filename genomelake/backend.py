@@ -31,7 +31,7 @@ def extract_fasta_to_file(fasta, output_dir, mode='bcolz', overwrite=False):
     fasta_file = FastaFile(fasta)
     file_shapes = {}
     for chrom, size in zip(fasta_file.references, fasta_file.lengths):
-        data = np.empty((size, NUM_SEQ_CHARS), dtype=np.float32)
+        data = np.zeros((size, NUM_SEQ_CHARS), dtype=np.float32)
         seq = fasta_file.fetch(chrom)
         one_hot_encode_sequence(seq, data)
         file_shapes[chrom] = data.shape
