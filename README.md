@@ -1,5 +1,5 @@
 # genomelake
-[![CircleCI](https://circleci.com/gh/kundajelab/genomelake.svg?style=svg)](https://circleci.com/gh/kundajelab/genomelake) [![Coverage Status](https://coveralls.io/repos/github/kundajelab/genomelake/badge.svg?branch=master)](https://coveralls.io/github/kundajelab/genomelake?branch=master)
+[![CircleCI](https://circleci.com/gh/kundajelab/genomelake.svg?style=svg)](https://circleci.com/gh/kundajelab/genomelake)[![Coverage Status](https://coveralls.io/repos/github/kundajelab/genomelake/badge.svg)](https://coveralls.io/github/kundajelab/genomelake)
 
 Efficient random access to genomic data for deep learning models.
 
