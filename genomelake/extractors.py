@@ -129,8 +129,8 @@ class BigwigExtractor(BaseExtractor):
 
         bw = pyBigWig.open(datafile)
         for index, interval in enumerate(intervals):
-            out[index] = bw.values(interval.chrom, interval.start,
-                                   interval.stop, numpy=True)
+            out[index] = bw.values(
+                interval.chrom, interval.start, interval.stop)
             if nan_as_zero:
                 nan_to_zero(out[index])
         bw.close()

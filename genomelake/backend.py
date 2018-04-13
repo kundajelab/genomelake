@@ -52,8 +52,8 @@ def extract_bigwig_to_file(bigwig, output_dir, mode='bcolz', dtype=np.float32,
     chrom_sizes = bw.chroms()
     file_shapes = {}
     for chrom, size in six.iteritems(chrom_sizes):
-        data = np.empty(size)
-        data = bw.values(chrom, 0, size, numpy=True)
+        data = np.zeros(size, dtype=np.float32)
+        data[:] = bw.values(chrom, 0, size)
         if nan_as_zero:
             nan_to_zero(data)
         _array_writer[mode](data.astype(dtype),
