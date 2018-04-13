@@ -9,6 +9,7 @@ from pysam import FastaFile
 import pyBigWig
 
 from . import backend
+from .util import nan_to_zero
 from .util import one_hot_encode_sequence
 
 NUM_SEQ_CHARS = 4
@@ -121,14 +122,17 @@ class BigwigExtractor(BaseExtractor):
 
     @staticmethod
     def _bigwig_extractor(datafile, intervals, out=None, **kwargs):
+        nan_as_zero = kwargs.get('nan_as_zero', True)
         if out is None:
             width = intervals[0].stop - intervals[0].start
-            out = np.zeros((len(intervals), width))
+            out = np.zeros((len(intervals), width), dtype=np.float32)
 
         bw = pyBigWig.open(datafile)
         for index, interval in enumerate(intervals):
-            out[index] = bw.values(interval.chrom, interval.start,
-                                   interval.stop, numpy=True)
+            out[index] = bw.values(
+                interval.chrom, interval.start, interval.stop)
+            if nan_as_zero:
+                nan_to_zero(out[index])
         bw.close()
 
         return out
