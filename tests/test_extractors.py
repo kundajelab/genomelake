@@ -85,16 +85,7 @@ def test_array_extractor_fasta(mode, in_memory):
 
 @pytest.fixture
 def test_bigwig_and_intervals():
-    bw_path = "tests/data/delete.bw"
-    bw = pyBigWig.open(bw_path, "w")
-    bw.addHeader([("chr1", 100), ("chr2", 100)])
-    chroms = np.array(["chr1", "chr2"])
-    starts = np.array([0, 1], dtype=np.int64)
-    ends = np.array([10, 11], dtype=np.int64)
-    values0 = np.array([0.1, 9], dtype=np.float64)
-    bw.addEntries(chroms, starts, ends=ends, values=values0)
-    bw.close()
-
+    bw_path = "tests/data/test_bigwig.bw"
     intervals = [Interval('chr1', 0, 10),
                  Interval('chr2', 0, 10)]
     expected_chr1 = np.array([0.1] * 10, dtype=np.float32)
