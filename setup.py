@@ -41,6 +41,6 @@ setup(
     ext_modules=[Extension('genomelake.util', ['genomelake/util.pyx'])],
 
     install_requires=['bcolz>=1.1', 'numpy', 'pybedtools',
-                      'pyBigWig==0.3.10', 'pysam', 'six>=1.9.0'],
+                      'pyBigWig>=0.3.11', 'pysam', 'six>=1.9.0'],
     extras_require={"develop": ['coveralls', 'pytest>=3.3.1', 'pytest-cov']}
 )
