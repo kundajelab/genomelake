@@ -55,10 +55,10 @@ def generate_inputs_and_labels(intervals_file, data_source, batch_size=128):
     extractor = ArrayExtractor(data_source)
     intervals_generator = batch_iter(bt, batch_size)
     for intervals_batch in intervals_generator:
-    	inputs = extractor(intervals_batch)
-	labels = []
-	for interval in intervals_batch:
-	    labels.append(float(interval.name))
+        inputs = extractor(intervals_batch)
+        labels = []
+        for interval in intervals_batch:
+            labels.append(float(interval.name))
         labels = np.array(labels)
         yield inputs, labels
 ```
