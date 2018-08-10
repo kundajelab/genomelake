@@ -109,9 +109,10 @@ class BigwigExtractor(BaseExtractor):
     def __init__(self, datafile, **kwargs):
         super(BigwigExtractor, self).__init__(datafile, **kwargs)
         self._verbose = kwargs.get('verbose', False)
-
+        self.bw = pyBigWig.open(datafile)
+        
     def _extract(self, intervals, out, **kwargs):
-        out[:] = self._bigwig_extractor(self._datafile, intervals,
+        out[:] = self._bigwig_extractor(self.bw, intervals,
                                         **kwargs)
 
         return out
@@ -121,18 +122,18 @@ class BigwigExtractor(BaseExtractor):
         return (num_intervals, width)
 
     @staticmethod
-    def _bigwig_extractor(datafile, intervals, out=None, **kwargs):
+    def _bigwig_extractor(bw, intervals, out=None, **kwargs):
         nan_as_zero = kwargs.get('nan_as_zero', True)
         if out is None:
             width = intervals[0].stop - intervals[0].start
             out = np.zeros((len(intervals), width), dtype=np.float32)
-
-        bw = pyBigWig.open(datafile)
+            
         for index, interval in enumerate(intervals):
             out[index] = bw.values(
                 interval.chrom, interval.start, interval.stop)
             if nan_as_zero:
                 nan_to_zero(out[index])
-        bw.close()
-
         return out
+    
+    def close(self):
+        return self.bw.close()
