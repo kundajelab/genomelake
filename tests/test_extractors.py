@@ -110,4 +110,5 @@ def test_bigwig_extractor(test_bigwig_and_intervals):
     bw_path, intervals, expected_data = test_bigwig_and_intervals
     extractor = BigwigExtractor(bw_path)
     data = extractor(intervals)
+    extractor.close()
     assert (data == expected_data).all()
