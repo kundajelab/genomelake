@@ -135,5 +135,8 @@ class BigwigExtractor(BaseExtractor):
                 nan_to_zero(out[index])
         return out
     
+    def __del__(self):
+        return self.close()
+    
     def close(self):
         return self.bw.close()
