@@ -83,6 +83,17 @@ class ArrayExtractor(BaseExtractor):
 class FastaExtractor(BaseExtractor):
 
     def __init__(self, datafile, use_strand=False, **kwargs):
+        """Fasta file extractor
+        
+        NOTE: The extractor is not thread-save.
+        If you with to use it with multiprocessing,
+        create a new extractor object in each process.
+        
+        Args:
+          datafile (str): path to the bigwig file
+          use_strand (bool): if True, the extracted sequence
+            is reverse complemented in case interval.strand == "-"
+        """
         super(FastaExtractor, self).__init__(datafile, **kwargs)
         self.use_strand = use_strand
         self.fasta = FastaFile(self._datafile)
@@ -107,6 +118,15 @@ class FastaExtractor(BaseExtractor):
 class BigwigExtractor(BaseExtractor):
 
     def __init__(self, datafile, **kwargs):
+        """Big-wig file extractor
+        
+        NOTE: The extractor is not thread-save.
+        If you with to use it with multiprocessing,
+        create a new extractor object in each process.
+        
+        Args:
+          datafile: path to the bigwig file
+        """
         super(BigwigExtractor, self).__init__(datafile, **kwargs)
         self._verbose = kwargs.get('verbose', False)
         self.bw = pyBigWig.open(datafile)
