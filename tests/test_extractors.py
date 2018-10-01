@@ -10,34 +10,35 @@ array_extractor_fasta_params = [("numpy", True),
                                 ("bcolz", True),
                                 ("bcolz", False)]
 
+
 def test_fasta_extractor_valid_intervals():
     extractor = FastaExtractor('tests/data/fasta_test.fa')
     intervals = [Interval('chr1', 0, 10),
                  Interval('chr2', 0, 10)]
     expected_data = np.array(
-        [[[ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ]],
+        [[[1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.]],
 
-         [[ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 0.25,  0.25,  0.25,  0.25],
-          [ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 0.25,  0.25,  0.25,  0.25]]], dtype=np.float32)
+         [[1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [0.25, 0.25, 0.25, 0.25],
+          [1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [0.25, 0.25, 0.25, 0.25]]], dtype=np.float32)
     data = extractor(intervals)
-    assert (data == expected_data).all()
+    assert np.allclose(data, expected_data)
 
 
 def test_fasta_extractor_over_chr_end():
@@ -46,6 +47,7 @@ def test_fasta_extractor_over_chr_end():
                  Interval('chr1', 1, 101)]
     with pytest.raises(ValueError):
         data = extractor(intervals)
+
 
 @pytest.mark.parametrize("mode,in_memory", array_extractor_fasta_params)
 def test_array_extractor_fasta(mode, in_memory):
@@ -59,29 +61,30 @@ def test_array_extractor_fasta(mode, in_memory):
     intervals = [Interval('chr1', 0, 10),
                  Interval('chr2', 0, 10)]
     expected_data = np.array(
-        [[[ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ]],
+        [[[1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.]],
 
-         [[ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 0.25,  0.25,  0.25,  0.25],
-          [ 1.  ,  0.  ,  0.  ,  0.  ],
-          [ 0.  ,  1.  ,  0.  ,  0.  ],
-          [ 0.  ,  0.  ,  1.  ,  0.  ],
-          [ 0.  ,  0.  ,  0.  ,  1.  ],
-          [ 0.25,  0.25,  0.25,  0.25]]], dtype=np.float32)
+         [[1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [0.25, 0.25, 0.25, 0.25],
+          [1., 0., 0., 0.],
+          [0., 1., 0., 0.],
+          [0., 0., 1., 0.],
+          [0., 0., 0., 1.],
+          [0.25, 0.25, 0.25, 0.25]]], dtype=np.float32)
     data = extractor(intervals)
-    assert (data == expected_data).all()
+    assert np.allclose(data, expected_data)
+
 
 @pytest.fixture
 def test_bigwig_and_intervals():
@@ -89,10 +92,11 @@ def test_bigwig_and_intervals():
     intervals = [Interval('chr1', 0, 10),
                  Interval('chr2', 0, 10)]
     expected_chr1 = np.array([0.1] * 10, dtype=np.float32)
-    expected_chr2 = np.array([0] + [9]*9, dtype=np.float32)
+    expected_chr2 = np.array([0] + [9] * 9, dtype=np.float32)
     expected_data = np.stack([expected_chr1, expected_chr2])
 
     return (bw_path, intervals, expected_data)
+
 
 @pytest.mark.parametrize("mode,in_memory", array_extractor_fasta_params)
 def test_array_extractor_bigwig(test_bigwig_and_intervals, mode, in_memory):
@@ -103,7 +107,7 @@ def test_array_extractor_bigwig(test_bigwig_and_intervals, mode, in_memory):
     extractor = ArrayExtractor(bw_dir_path, in_memory=in_memory)
 
     data = extractor(intervals)
-    assert (data == expected_data).all()
+    assert np.allclose(data, expected_data)
 
 
 def test_bigwig_extractor(test_bigwig_and_intervals):
@@ -111,4 +115,4 @@ def test_bigwig_extractor(test_bigwig_and_intervals):
     extractor = BigwigExtractor(bw_path)
     data = extractor(intervals)
     extractor.close()
-    assert (data == expected_data).all()
+    assert np.allclose(data, expected_data)
