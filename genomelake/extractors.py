@@ -83,6 +83,17 @@ class ArrayExtractor(BaseExtractor):
 class FastaExtractor(BaseExtractor):
 
     def __init__(self, datafile, use_strand=False, **kwargs):
+        """Fasta file extractor
+        
+        NOTE: The extractor is not thread-save.
+        If you with to use it with multiprocessing,
+        create a new extractor object in each process.
+        
+        Args:
+          datafile (str): path to the bigwig file
+          use_strand (bool): if True, the extracted sequence
+            is reverse complemented in case interval.strand == "-"
+        """
         super(FastaExtractor, self).__init__(datafile, **kwargs)
         self.use_strand = use_strand
         self.fasta = FastaFile(self._datafile)
@@ -107,11 +118,21 @@ class FastaExtractor(BaseExtractor):
 class BigwigExtractor(BaseExtractor):
 
     def __init__(self, datafile, **kwargs):
+        """Big-wig file extractor
+        
+        NOTE: The extractor is not thread-save.
+        If you with to use it with multiprocessing,
+        create a new extractor object in each process.
+        
+        Args:
+          datafile: path to the bigwig file
+        """
         super(BigwigExtractor, self).__init__(datafile, **kwargs)
         self._verbose = kwargs.get('verbose', False)
-
+        self.bw = pyBigWig.open(datafile)
+        
     def _extract(self, intervals, out, **kwargs):
-        out[:] = self._bigwig_extractor(self._datafile, intervals,
+        out[:] = self._bigwig_extractor(self.bw, intervals,
                                         **kwargs)
 
         return out
@@ -121,18 +142,21 @@ class BigwigExtractor(BaseExtractor):
         return (num_intervals, width)
 
     @staticmethod
-    def _bigwig_extractor(datafile, intervals, out=None, **kwargs):
+    def _bigwig_extractor(bw, intervals, out=None, **kwargs):
         nan_as_zero = kwargs.get('nan_as_zero', True)
         if out is None:
             width = intervals[0].stop - intervals[0].start
             out = np.zeros((len(intervals), width), dtype=np.float32)
-
-        bw = pyBigWig.open(datafile)
+            
         for index, interval in enumerate(intervals):
             out[index] = bw.values(
                 interval.chrom, interval.start, interval.stop)
             if nan_as_zero:
                 nan_to_zero(out[index])
-        bw.close()
-
         return out
+    
+    def __del__(self):
+        return self.close()
+    
+    def close(self):
+        return self.bw.close()
