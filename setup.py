@@ -44,5 +44,5 @@ setup(
 
     install_requires=['bcolz>=1.1', 'numpy',
                       'pyBigWig', 'pyfaidx', 'six>=1.9.0'],
-    extras_require={"develop": ['coveralls', 'pytest>=3.3.1', 'pytest-cov']}
+    extras_require={"develop": ['coveralls', 'pytest>=3.3.1', 'pytest-cov', 'pybedtools']}
 )
