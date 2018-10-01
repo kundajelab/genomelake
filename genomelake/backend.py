@@ -29,7 +29,7 @@ def extract_fasta_to_file(fasta, output_dir, mode='bcolz', overwrite=False):
     file_shapes = {}
     for chrom in fasta_file.keys():
         data = np.empty((len(fasta_file[chrom]), NUM_SEQ_CHARS), dtype=np.float32)
-        seq = fasta_file[chrom][:]
+        seq = str(fasta_file[chrom][:])
         one_hot_encode_sequence(seq, data)
         file_shapes[chrom] = data.shape
         _array_writer[mode](data, os.path.join(output_dir, chrom))

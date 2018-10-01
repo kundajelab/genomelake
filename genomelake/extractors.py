@@ -108,7 +108,7 @@ class FastaExtractor(BaseExtractor):
 
     def _extract(self, intervals, out, **kwargs):
         for index, interval in enumerate(intervals):
-            seq = self.fasta[interval.chrom][interval.start:interval.stop]
+            seq = str(self.fasta[interval.chrom][interval.start:interval.stop])
             one_hot_encode_sequence(seq, out[index, :, :])
 
             # reverse-complement seq the negative strand
