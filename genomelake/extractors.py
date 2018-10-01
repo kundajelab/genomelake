@@ -2,12 +2,6 @@ from __future__ import absolute_import, division, print_function
 import numpy as np
 import six
 
-import bcolz
-from pybedtools import BedTool
-from pybedtools import Interval
-from pysam import FastaFile
-import pyBigWig
-
 from . import backend
 from .util import nan_to_zero
 from .util import one_hot_encode_sequence
@@ -22,6 +16,17 @@ class BaseExtractor(object):
         self._datafile = datafile
 
     def __call__(self, intervals, out=None, **kwargs):
+        """
+
+        Args:
+          intervals: a list of objects containing the following attributes:
+            - chrom, start, stop. (Fulfilled by pybedtools.Interval)
+          out: numpy array to be populated
+          **kwargs: kwargs passed to _extract of the submethods
+
+        Returns:
+          np.array of shape 
+        """
         data = self._check_or_create_output_array(intervals, out)
         self._extract(intervals, data, **kwargs)
         return data
@@ -59,6 +64,7 @@ class ArrayExtractor(BaseExtractor):
         self.multiprocessing_safe = in_memory
 
         arr = next(iter(self._data.values()))
+
         def _mm_extract(self, intervals, out, **kwargs):
             mm_data = self._data
             for index, interval in enumerate(intervals):
@@ -84,11 +90,11 @@ class FastaExtractor(BaseExtractor):
 
     def __init__(self, datafile, use_strand=False, **kwargs):
         """Fasta file extractor
-        
+
         NOTE: The extractor is not thread-save.
         If you with to use it with multiprocessing,
         create a new extractor object in each process.
-        
+
         Args:
           datafile (str): path to the bigwig file
           use_strand (bool): if True, the extracted sequence
@@ -96,12 +102,13 @@ class FastaExtractor(BaseExtractor):
         """
         super(FastaExtractor, self).__init__(datafile, **kwargs)
         self.use_strand = use_strand
-        self.fasta = FastaFile(self._datafile)
+        from pyfaidx import Fasta
 
-    def _extract(self, intervals, out, **kwargs):    
+        self.fasta = Fasta(self._datafile, as_raw=True)
+
+    def _extract(self, intervals, out, **kwargs):
         for index, interval in enumerate(intervals):
-            seq = self.fasta.fetch(str(interval.chrom), interval.start,
-                                       interval.stop)
+            seq = self.fasta[interval.chrom][interval.start:interval.stop]
             one_hot_encode_sequence(seq, out[index, :, :])
 
             # reverse-complement seq the negative strand
@@ -119,18 +126,19 @@ class BigwigExtractor(BaseExtractor):
 
     def __init__(self, datafile, **kwargs):
         """Big-wig file extractor
-        
+
         NOTE: The extractor is not thread-save.
         If you with to use it with multiprocessing,
         create a new extractor object in each process.
-        
+
         Args:
           datafile: path to the bigwig file
         """
         super(BigwigExtractor, self).__init__(datafile, **kwargs)
+        import pyBigWig
         self._verbose = kwargs.get('verbose', False)
         self.bw = pyBigWig.open(datafile)
-        
+
     def _extract(self, intervals, out, **kwargs):
         out[:] = self._bigwig_extractor(self.bw, intervals,
                                         **kwargs)
@@ -147,16 +155,16 @@ class BigwigExtractor(BaseExtractor):
         if out is None:
             width = intervals[0].stop - intervals[0].start
             out = np.zeros((len(intervals), width), dtype=np.float32)
-            
+
         for index, interval in enumerate(intervals):
             out[index] = bw.values(
                 interval.chrom, interval.start, interval.stop)
             if nan_as_zero:
                 nan_to_zero(out[index])
         return out
-    
+
     def __del__(self):
         return self.close()
-    
+
     def close(self):
         return self.bw.close()

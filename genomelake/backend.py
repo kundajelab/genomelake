@@ -5,10 +5,6 @@ import os
 import six
 
 import bcolz
-from pybedtools import BedTool
-import pyBigWig
-from pysam import FastaFile
-
 from .util import makedirs
 from .util import one_hot_encode_sequence
 from .util import nan_to_zero
@@ -25,14 +21,15 @@ _array_writer = {
 
 
 def extract_fasta_to_file(fasta, output_dir, mode='bcolz', overwrite=False):
+    from pyfaidx import Fasta
     assert mode in _array_writer
 
     makedirs(output_dir, exist_ok=overwrite)
-    fasta_file = FastaFile(fasta)
+    fasta_file = Fasta(fasta, as_raw=True)
     file_shapes = {}
-    for chrom, size in zip(fasta_file.references, fasta_file.lengths):
-        data = np.zeros((size, NUM_SEQ_CHARS), dtype=np.float32)
-        seq = fasta_file.fetch(chrom)
+    for chrom in fasta_file.keys():
+        data = np.empty((len(fasta_file[chrom]), NUM_SEQ_CHARS), dtype=np.float32)
+        seq = fasta_file[chrom][:]
         one_hot_encode_sequence(seq, data)
         file_shapes[chrom] = data.shape
         _array_writer[mode](data, os.path.join(output_dir, chrom))
@@ -45,6 +42,7 @@ def extract_fasta_to_file(fasta, output_dir, mode='bcolz', overwrite=False):
 
 def extract_bigwig_to_file(bigwig, output_dir, mode='bcolz', dtype=np.float32,
                            overwrite=False, nan_as_zero=True):
+    import pyBigWig
     assert mode in _array_writer
 
     makedirs(output_dir, exist_ok=overwrite)
@@ -83,7 +81,7 @@ def load_directory(base_dir, in_memory=False):
     if metadata['type'] == 'array_numpy':
         mmap_mode = None if in_memory else 'r'
         data = {chrom: np.load('{}.npy'.format(os.path.join(base_dir, chrom)),
-                                mmap_mode=mmap_mode)
+                               mmap_mode=mmap_mode)
                 for chrom in metadata['file_shapes']}
 
         for chrom, shape in six.iteritems(metadata['file_shapes']):

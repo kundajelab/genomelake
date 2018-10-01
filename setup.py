@@ -2,8 +2,10 @@ import os
 from setuptools.extension import Extension
 from setuptools import setup, find_packages
 
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 setup(
     name='genomelake',
@@ -40,7 +42,7 @@ setup(
 
     ext_modules=[Extension('genomelake.util', ['genomelake/util.pyx'])],
 
-    install_requires=['bcolz>=1.1', 'numpy', 'pybedtools',
-                      'pyBigWig', 'pysam', 'six>=1.9.0'],
+    install_requires=['bcolz>=1.1', 'numpy',
+                      'pyBigWig', 'pyfaidx', 'six>=1.9.0'],
     extras_require={"develop": ['coveralls', 'pytest>=3.3.1', 'pytest-cov']}
 )
