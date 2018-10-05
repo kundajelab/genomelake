@@ -108,12 +108,12 @@ class FastaExtractor(BaseExtractor):
 
     def _extract(self, intervals, out, **kwargs):
         for index, interval in enumerate(intervals):
-            seq = str(self.fasta[interval.chrom][interval.start:interval.stop])
-            one_hot_encode_sequence(seq, out[index, :, :])
+            # optionally reverse complement
+            rc = self.use_strand and interval.strand == "-"
 
-            # reverse-complement seq the negative strand
-            if self.use_strand and interval.strand == "-":
-                out[index, :, :] = out[index, ::-1, ::-1]
+            # pyfaidx wants a 1-based interval
+            seq = str(self.fasta.get_seq(interval.chrom, interval.start + 1, interval.stop, rc=rc).seq)
+            one_hot_encode_sequence(seq, out[index, :, :])
 
         return out
 
