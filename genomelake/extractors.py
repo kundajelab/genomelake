@@ -104,7 +104,7 @@ class FastaExtractor(BaseExtractor):
         self.use_strand = use_strand
         from pyfaidx import Fasta
 
-        self.fasta = Fasta(self._datafile, as_raw=True)
+        self.fasta = Fasta(self._datafile)
 
     def _extract(self, intervals, out, **kwargs):
         for index, interval in enumerate(intervals):
