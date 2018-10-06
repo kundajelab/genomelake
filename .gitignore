@@ -1,0 +1,8 @@
+/tests/data/fasta_test.fa.fai
+tests/data/fasta_test_dir_bcolz*
+tests/data/fasta_test_dir*
+/tests/data/test_bigwig.bw.dir/chr1.npy
+tests/data/test_bigwig.bw.dir/
+**/__pycache__/**
+genomelake.egg-info/
+.pytest_cache/
