@@ -9,6 +9,10 @@ jobs:
       - checkout
 
       - run:
+          name: install tiledb
+          command: sudo pip install cmake && sudo pip install tiledb
+
+      - run:
           name: install dependencies
           command: sudo pip install -e '.[develop]'
 
@@ -29,15 +33,18 @@ jobs:
         # TODO check
       - image: circleci/python:3.5
 
-
     working_directory: ~/repo
 
     steps:
       - checkout
 
       - run:
+          name: install tiledb
+          command: sudo pip install cmake && sudo pip install tiledb
+
+      - run:
           name: install dependencies
-          command: sudo pip install -e '.[develop]'
+          command: sudo pip install --user -e '.[develop]'
 
       - run:
           name: run tests

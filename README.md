@@ -11,7 +11,8 @@ Supports the following types of input data:
 genomelake extracts signal from genomic inputs in provided BED intervals.
 
 ## Requirements
-- python 2.7 or 3.5
+- python 2.7, 3.5, or 3.6
+- tiledb
 - bcolz
 - cython
 - numpy
@@ -82,7 +83,7 @@ model.fit_generator(inputs_labels_generator, steps_per_epoch=100)
 
 Here is the expected result:
 ```
-100/100 [==============================] - 7s - loss: 0.0584 - acc: 0.9905 
+100/100 [==============================] - 7s - loss: 0.0584 - acc: 0.9905
 ```
 
 ## License
